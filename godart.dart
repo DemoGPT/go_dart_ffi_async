@@ -18,11 +18,11 @@ void main() async {
   print('-----------111--------');
   testGo().then((value) {
     print('------$value---------');
-    // final utf = Pointer<Utf8>.fromAddress(value as int);
-    // print('------${utf.toDartString()}---------');
+    final utf = Pointer<Utf8>.fromAddress(value as int);
+    print('------${utf.toDartString()}---------');
 
-    final work = Pointer<Work>.fromAddress(value as int);
-    print(work.ref.name.toDartString());
+    // final work = Pointer<Work>.fromAddress(value as int);
+    // print(work.ref.name.toDartString());
   });
   print('-----------222--------');
 }

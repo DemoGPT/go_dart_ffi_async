@@ -3,7 +3,7 @@ package main
 import (
 	"C"
 	"fmt"
-	"github.com/mraleph/go_dart_ffi_example/dart_api_dl"
+	"go_dart_ffi_async/dart_api_dl"
 	"time"
 	"unsafe"
 )
@@ -15,36 +15,34 @@ func InitializeDartApi(api unsafe.Pointer) {
 
 //export StartWork
 func StartWork(port int64, goFuncName *C.char) {
-    funcName := C.GoString(goFuncName)
-	fmt.Println("Go: Starting some asynchronous work")
+	funcName := C.GoString(goFuncName)
+	fmt.Println("Go: Starting some asynchronous work:" + funcName)
 	switch funcName {
-        case "goInit":
-            go goInit(port)
-        case "goNetEnv":
-            go goNetEnv(port)
-        default:
-            fmt.Printf("GO: goFuncName[%s] does not exist",funcName)
-            dart_api_dl.SendToPort(port,  "default")
-    }
+	case "goInit":
+		go goInit(port)
+	case "goNetEnv":
+		go goNetEnv(port)
+	default:
+		fmt.Printf("GO: goFuncName[%s] does not exist", funcName)
+		dart_api_dl.SendToPortStr(port, "default")
+	}
 
 	fmt.Println("Go: Returning to Dart")
 }
 
 func goInit(port int64) {
 	var counter int64 = 50
-    time.Sleep(2 * time.Second)
-    fmt.Printf("GO: 2 seconds passed, goInit back: %d\n",counter)
-    dart_api_dl.SendToPort(port,  "goInit")
+	time.Sleep(2 * time.Second)
+	fmt.Printf("GO: 2 seconds passed, goInit back: %d\n", counter)
+	dart_api_dl.SendToPortStr(port, "goInit")
 }
 
 func goNetEnv(port int64) {
-    var counter int64 = 60
-    time.Sleep(2 * time.Second)
-    fmt.Printf("GO: 2 seconds passed, goNetEnv back: %d\n",counter)
-    dart_api_dl.SendToPort(port,  "goNetEnv")
+	var counter int64 = 60
+	time.Sleep(2 * time.Second)
+	fmt.Printf("GO: 2 seconds passed, goNetEnv back: %d\n", counter)
+	dart_api_dl.SendToPortStr(port, "goNetEnv")
 }
-
-
 
 // func work(port int64) {
 // 	var counter int64
